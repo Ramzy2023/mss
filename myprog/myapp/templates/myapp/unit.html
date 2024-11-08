@@ -1,0 +1,113 @@
+{% extends "myapp/base.html" %}
+
+{% block content %}
+<div class="container mt-5 p-5 border">
+    <div class="">
+        <a href="" class="btn btn-primary px-5 btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">Add New Unit</a>
+    </div>
+
+    <table class="table mt-5 table-light">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Unit Name</th>
+            <th scope="col">Actions</th>
+           </tr>
+        </thead>
+        <tbody>
+          {%for unit in unit_list%}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{unit.unit_measure}}</td>
+            <td>
+                <a href="" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal_{{unit.id}}">Edit</a>
+                <a href="" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal_{{unit.id}}">Delete</a>
+            </td>
+          </tr>
+          <!--Update Modal -->
+            <div class="modal fade" id="updateModal_{{unit.id}}" tabindex="-1" aria-labelledby="updateModalLabel_{{unit.id}}" aria-hidden="true">
+                <div class="modal-dialog">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="updateModalLabel_{{unit.id}}">Update Unit Name</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="id" value="{{unit.id}}" class="">
+                            <div class="">
+                                <label for="unit_name">Unit Name</label>
+                            </div>
+                            <div class="">
+                                <input type="text" value="{{unit.unit_name}}" class="form-control" name="unit_name" id="unit_name">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" name="unit_update">Update Unit</button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal_{{unit.id}}" tabindex="-1" aria-labelledby="deleteModalLabel_{{unit.id}}" aria-hidden="true">
+                <div class="modal-dialog">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{unit.id}}" class="">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="deleteModalLabel_{{unit.id}}">Delete Unit Name</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure? you want to delete</p>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" name="unit_delete">Delete Unit</button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+          {%endfor%}
+        </tbody>
+      </table>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+     <form action="" method="post">
+        {% csrf_token %}
+        <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="addModalLabel">Add Unit Name</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <label for="unit_name">Unit Name</label>
+                </div>
+                <div class="">
+                    <input type="text" class="form-control" name="unit_name" id="unit_name">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" name="unit_add">Add Unit</button>
+            </div>
+          </div>
+     </form>
+    </div>
+  </div>
+{% endblock content %}
+
+
+
+

@@ -1,0 +1,181 @@
+{% extends "myapp/base.html" %}
+
+{% block content %}
+<div class="container mt-5 p-5 border">
+    <div class="">
+        <a href="" class="btn btn-primary px-5 btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">Add New Items</a>
+    </div>
+
+    <table class="table mt-5 table-light">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Stock #</th>
+                <th scope="col">Item Description</th>
+                <th scope="col">Unit</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Unit Cost</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stock_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ stock.stock_num }}</td>
+                <td>{{ stock.stock_name }}</td>
+                <td>{{ stock.unit.unit_measure }}</td>
+                <td>{{ stock.stock_qty}}</td>
+                <td>{{ stock.unit_cost }}</td>
+                <td>
+                    <a href="" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal_{{ stock.id }}">Edit</a>
+                    <a href="" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal_{{ stock.id }}">Delete</a>
+                </td>
+            </tr>
+
+            <!-- Update Modal -->
+            <div class="modal fade" id="updateModal_{{ stock.id }}" tabindex="-1" aria-labelledby="updateModalLabel_{{ stock.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="updateModalLabel_{{ stock.id }}">Update Item</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="id" value="{{ stock.id }}">
+
+                                <div>
+                                    <label for="stock_num_update_{{ stock.id }}">Stock Number</label>
+                                    <input type="number" value="{{ stock.stock_num }}" class="form-control" name="stock_num" id="stock_num_update_{{ stock.id }}" required>
+                                </div>
+
+                                <div>
+                                    <label for="stock_name_update_{{ stock.id }}">Item Description</label>
+                                    <input type="text" value="{{ stock.stock_name }}" class="form-control" name="stock_name" id="stock_name_update_{{ stock.id }}" required>
+                                </div>
+
+                                <div>
+                                    <label for="unit_measure_update_{{ stock.id }}">Unit of Measure</label>
+                                </div>
+                                <div>
+                                    <select class="form-control" name="unit_measure" id="unit_measure_update_{{ stock.id }}" required>
+                                        <option value="" disabled selected>Select Unit of Measure</option>
+                                        {% for unit in unit_list %}
+                                            <option value="{{ unit.id }}">{{ unit.unit_measure }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="stock_qty_update_{{ stock.id }}">Quantity</label>
+                                    <input type="number" value="{{ stock.stock_qty }}" class="form-control" name="stock_qty" id="stock_qty_update_{{ stock.id }}" required>
+                                </div>
+
+                                <div>
+                                    <label for="unit_cost_update_{{ stock.id }}">Item Unit Cost</label>
+                                    <input type="number" value="{{ stock.unit_cost }}" class="form-control" name="unit_cost" id="unit_cost_update_{{ stock.id }}" required step="0.01" min="0">
+                                </div>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" name="stock_update">Update Item</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal_{{ stock.id }}" tabindex="-1" aria-labelledby="deleteModalLabel_{{ stock.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ stock.id }}">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="deleteModalLabel_{{ stock.id }}">Delete Office</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure? You want to delete this office?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger" name="stock_delete">Delete Office</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addModalLabel">Add Items</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <div>
+                        <label for="stock_num">Stock Number</label>
+                    </div>
+                    <div>
+                        <input type="number" class="form-control" name="stock_num" id="stock_num" value="" required>
+                    </div>
+
+                    <div>
+                        <label for="stock_name">Item Description</label>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control" name="stock_name" id="stock_name" value="" required>
+                    </div>
+
+                    <div>
+                        <label for="unit_measure">Unit of Measure</label>
+                    </div>
+                    <div>
+                        <select class="form-control" name="unit_measure" id="unit_measure" required>
+                            <option value="" disabled selected>Select Unit of Measure</option>
+                            {% for unit in unit_list %}
+                                <option value="{{ unit.id }}">{{ unit.unit_measure }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="stock_qty">Quantity</label>
+                    </div>
+                    <div>
+                        <input type="number" class="form-control" name="stock_qty" id="stock_qty" value="" required>
+                    </div>
+
+                    <div>
+                        <label for="unit_cost">Item Unit Cost</label>
+                    </div>
+                    <div>
+                        <input type="number" class="form-control" name="unit_cost" id="unit_cost" required step="0.01" min="0">
+                    </div>
+                    
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="stock_add">Add Item</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
